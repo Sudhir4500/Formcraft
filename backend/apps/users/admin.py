@@ -8,15 +8,15 @@ from apps.users.models import User
 class UserAdmin(BaseUserAdmin):
     list_display = (
         "email",
-        "display_name",
-        "is_premium",
+        "name",
+        "plan",
         "is_staff",
         "is_active",
         "last_login",
     )
 
     list_filter = (
-        "is_premium",
+        "plan",
         "is_staff",
         "is_superuser",
         "is_active",
@@ -24,7 +24,7 @@ class UserAdmin(BaseUserAdmin):
 
     search_fields = (
         "email",
-        "display_name",
+        "name",
     )
 
     ordering = ("email",)
@@ -49,7 +49,7 @@ class UserAdmin(BaseUserAdmin):
             "Profile",
             {
                 "fields": (
-                    "display_name",
+                    "name",
                 )
             },
         ),
@@ -57,7 +57,7 @@ class UserAdmin(BaseUserAdmin):
             "Subscription",
             {
                 "fields": (
-                    "is_premium",
+                    "plan",
                     "stripe_customer_id",
                 )
             },
@@ -92,7 +92,7 @@ class UserAdmin(BaseUserAdmin):
                 "classes": ("wide",),
                 "fields": (
                     "email",
-                    "display_name",
+                    "name",
                     "password1",
                     "password2",
                     "is_staff",
@@ -103,15 +103,15 @@ class UserAdmin(BaseUserAdmin):
     )
     '''
     These are used to define custom actions for the admin panel
-    -used to upgrade or downgrade multiple user premium status without leaving the admin panel
+    -used to upgrade or downgrade multiple user plan status without leaving the admin panel
     '''
-    @admin.action(description="Mark selected users as premium")
-    def make_premium(modeladmin, request, queryset):
-        queryset.update(is_premium=True)
+    @admin.action(description="Mark selected users as Pro")
+    def make_pro(self, request, queryset):
+        queryset.update(plan="pro")
 
 
-    @admin.action(description="Remove premium status")
-    def remove_premium(modeladmin, request, queryset):
-        queryset.update(is_premium=False)
+    @admin.action(description="Mark selected users as Free")
+    def make_free(self, request, queryset):
+        queryset.update(plan="free")
 
-    actions = [make_premium, remove_premium]
+    actions = [make_pro, make_free]

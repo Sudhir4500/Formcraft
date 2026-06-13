@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --primary: #4f46e5;
+  /* Indigo 600 */
+  --secondary: #64748b;
+  /* Slate 500 */
+
+  /* Borders */
+  --border-sm: 1px;
+  --border-md: 2px;
+  --border-lg: 4px;
+  /* text sizes */
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4rem;
+  --text-6xl: 5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #6366f1;
+    /* Indigo 500 */
+    --secondary: #475569;
+    /* Slate 600 */
+  }
+}
+
+/* Base Body Styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@theme inline {
+  /* Colors - Now available as bg-primary, text-primary, etc. */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+
+  /* Borders - Now available as border-sm, border-md, etc. */
+  --border-width-sm: var(--border-sm);
+  --border-width-md: var(--border-md);
+  --border-width-lg: var(--border-lg);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
