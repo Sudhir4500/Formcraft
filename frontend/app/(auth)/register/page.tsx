@@ -11,7 +11,7 @@ export default function RegisterPage() {
     const [formData, setFormData] = useState({ name: '', email: '', password: '', password_confirmation: '' })
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [validationErrors, setValidationErrors] = useState<any>({})
+    const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -29,7 +29,8 @@ export default function RegisterPage() {
             await registerUser(formData)
             router.push('/dashboard')
             router.refresh()
-        } catch (err: any) {
+        } catch (error) {
+            const err = error as { errors?: Record<string, string[]>, message?: string }
             setError(err.message || 'Registration failed')
             setValidationErrors(err.errors || {})
         } finally {
@@ -40,10 +41,10 @@ export default function RegisterPage() {
     return (
         <AuthLayout title="Create Account" subtitle="Get started with FormCraft today" error={error}>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <AuthInput label="Full name" id="name" value={formData.name} onChange={(e: any) => setFormData({ ...formData, name: e.target.value })} error={validationErrors?.name} />
-                <AuthInput label="Email address" id="email" type="email" value={formData.email} onChange={(e: any) => setFormData({ ...formData, email: e.target.value })} error={validationErrors?.email} />
-                <AuthInput label="Password" id="password" type="password" value={formData.password} onChange={(e: any) => setFormData({ ...formData, password: e.target.value })} error={validationErrors?.password} />
-                <AuthInput label="Confirm password" id="password_confirmation" type="password" value={formData.password_confirmation} onChange={(e: any) => setFormData({ ...formData, password_confirmation: e.target.value })} error={validationErrors?.password_confirmation} />
+                <AuthInput label="Full name" id="name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })} error={validationErrors?.name} />
+                <AuthInput label="Email address" id="email" type="email" value={formData.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })} error={validationErrors?.email} />
+                <AuthInput label="Password" id="password" type="password" value={formData.password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })} error={validationErrors?.password} />
+                <AuthInput label="Confirm password" id="password_confirmation" type="password" value={formData.password_confirmation} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password_confirmation: e.target.value })} error={validationErrors?.password_confirmation} />
 
                 <button type="submit" disabled={!formData.name || !formData.email || !formData.password || !formData.password_confirmation || isLoading} className={!formData.name || !formData.email || !formData.password || !formData.password_confirmation || isLoading ? "w-full bg-primary/60 py-3 rounded-lg border-md font-medium mt-4 cursor-not-allowed" : "w-full bg-primary py-3 rounded-lg border-md font-medium mt-4 cursor-pointer"}>
                     {isLoading ? 'Registering...' : 'Create Account'}

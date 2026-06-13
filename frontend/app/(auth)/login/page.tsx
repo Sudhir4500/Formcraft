@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [validationErrors, setValidationErrors] = useState<any>({})
+  const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
 
   const router = useRouter()
   const setUser = useAuthStore(state => state.setUser)
@@ -31,7 +31,8 @@ export default function LoginPage() {
 
       // 3. Navigate to Dashboard
       router.push('/dashboard')
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as { errors?: Record<string, string[]>, message?: string }
       // 4. Handle Errors from Django's ApiResponse
       if (err.errors) setValidationErrors(err.errors)
       else setError(err.message || 'Login failed')
@@ -48,7 +49,7 @@ export default function LoginPage() {
           id="email"
           type="email"
           value={formData.email}
-          onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
           error={validationErrors.email}
         />
         <AuthInput
@@ -56,7 +57,7 @@ export default function LoginPage() {
           id="password"
           type="password"
           value={formData.password}
-          onChange={(e: any) => setFormData({ ...formData, password: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })}
           error={validationErrors.password}
         />
 
