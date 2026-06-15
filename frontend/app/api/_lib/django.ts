@@ -22,14 +22,20 @@ async function getHeaders(tokenOverride?: string) {
  * Centralized response handler to ensure consistent error/success parsing
  */
 async function handleResponse<T>(res: Response): Promise<ApiResponse<T>> {
-    if (res.status === 401) {
-        // 401 means the session is invalid (and refresh also failed)
-        throw new Error('UNAUTHORIZED');
-    }
+    // if (res.status === 401) {
+    //     // 401 means the session is invalid (and refresh also failed)
+    //     throw new Error('UNAUTHORIZED');
+    // }
 
     const data = await res.json();
     if (!res.ok) {
-        throw new Error(data.message || 'API Request Failed');
+        throw {
+            success: data.success,
+            message: data.message || "Something went wrong",
+            data: data.data || null,
+            errors: data.errors || null,
+            status: res.status,
+        }
     }
     return data;
 }
@@ -40,7 +46,7 @@ async function handleResponse<T>(res: Response): Promise<ApiResponse<T>> {
 async function attemptRefresh(): Promise<string | null> {
     const cookieStore = await cookies();
     const refreshToken = cookieStore.get('refresh_token')?.value;
-    
+
     if (!refreshToken) return null;
 
     try {
@@ -53,7 +59,7 @@ async function attemptRefresh(): Promise<string | null> {
         if (res.ok) {
             const resData = await res.json();
             const { access, refresh } = resData.data;
-            
+
             cookieStore.set('access_token', access, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',

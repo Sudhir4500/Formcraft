@@ -6,6 +6,7 @@ import { AuthLayout } from '@/components/auth/AuthLayout'
 import { AuthInput } from '@/components/auth/AuthInput'
 import { loginUser } from '@/services/authService' // Centralized service
 import { useAuthStore } from '@/store/authStore'
+import { useApiErrorHandler } from '@/hooks/useApiErrorHandler'
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -15,31 +16,27 @@ export default function LoginPage() {
 
   const router = useRouter()
   const setUser = useAuthStore(state => state.setUser)
+  const { parseError } = useApiErrorHandler()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    setValidationErrors({})
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setValidationErrors({});
 
     try {
-      // 1. Call BFF Route
-      const response = await loginUser(formData)
-
-      // 2. Sync Global Store (User data)
-      setUser(response.data.user)
-
-      // 3. Navigate to Dashboard
-      router.push('/dashboard')
+      const response = await loginUser(formData);
+      setUser(response.data?.user ?? null);
+      router.push('/dashboard');
     } catch (error) {
-      const err = error as { errors?: Record<string, string[]>, message?: string }
-      // 4. Handle Errors from Django's ApiResponse
-      if (err.errors) setValidationErrors(err.errors)
-      else setError(err.message || 'Login failed')
+      const { message, validationErrors } = parseError(error);
+      setError(message);
+      setValidationErrors(validationErrors);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
 
   return (
     <AuthLayout title="Welcome Back" subtitle="Sign in to your account" error={error}>

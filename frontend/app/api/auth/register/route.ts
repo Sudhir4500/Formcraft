@@ -1,42 +1,49 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { djangoPost } from '@/app/api/_lib/django'
-import { LoginResponseData } from '@/types/api'
+import { djangoPost } from '@/app/api/_lib/django';
+import { NextResponse } from 'next/server';
+import { LoginResponseData } from '@/types/api';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
     try {
-        const body = await req.json()
-        const resData = await djangoPost<LoginResponseData>('auth/register/', body)
+        const body = await req.json();
 
-        if (resData.success && resData.data?.token) {
-            const { access, refresh } = resData.data.token
-            const response = NextResponse.json(resData)
+        // Call Django's LoginView
+        const response = await djangoPost<LoginResponseData>('auth/login/', body);
 
-            // Set access token cookie
-            response.cookies.set('access_token', access, {
+        if (response.success && response.data?.token) {
+            const res = NextResponse.json(response);
+
+            // Set HttpOnly cookies
+            res.cookies.set('access_token', response.data.token.access, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 path: '/',
                 maxAge: 60 * 15,
-            })
+            });
 
-            // Set refresh token cookie
-            response.cookies.set('refresh_token', refresh, {
+            res.cookies.set('refresh_token', response.data.token.refresh, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7,
-            })
+            });
 
-            return response
+            return res;
         }
 
-        return NextResponse.json(resData, { status: 400 })
+        // Forward backend error payload with correct status
+        return NextResponse.json(response, { status: 400 });
     } catch (error: any) {
+        // Preserve backend error structure if available
         return NextResponse.json(
-            { success: false, message: error.message || 'An error occurred', data: null, errors: null },
-            { status: 500 }
-        )
+            {
+                success: false,
+                message: error.message || 'Login failed',
+                data: null,
+                errors: error.errors || null,
+            },
+            { status: error.status || 500 }
+        );
     }
 }

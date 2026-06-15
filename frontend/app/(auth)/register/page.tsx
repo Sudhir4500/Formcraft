@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { AuthInput } from '@/components/auth/AuthInput'
 import { registerUser } from '@/services/authService'
+import { useApiErrorHandler } from '@/hooks/useApiErrorHandler';
+
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -12,6 +14,7 @@ export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
+    const { parseError } = useApiErrorHandler();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -30,9 +33,9 @@ export default function RegisterPage() {
             router.push('/dashboard')
             router.refresh()
         } catch (error) {
-            const err = error as { errors?: Record<string, string[]>, message?: string }
-            setError(err.message || 'Registration failed')
-            setValidationErrors(err.errors || {})
+            const { message, validationErrors } = parseError(error)
+            setError(message)
+            setValidationErrors(validationErrors)
         } finally {
             setIsLoading(false)
         }

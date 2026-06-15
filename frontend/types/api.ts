@@ -1,12 +1,20 @@
 // types/api.ts
 import { User } from './user';
 
-export interface ApiResponse<T = any> {
-    success: boolean;
-    message: string;
-    data: T | null;
-    errors: any | null;
-}
+export type ApiResponse<T> =
+    | {
+        success: true;
+        message: string;
+        data: T;
+        errors: null;
+    }
+    | {
+        success: false;
+        message: string;
+        data: null;
+        errors: Record<string, string[]> | null;
+    };
+
 
 export interface TokenPair {
     access: string;
@@ -34,3 +42,10 @@ export interface RegisterCredentials {
     password: string;
     password_confirmation: string;
 }
+
+export type ApiError = {
+    success: false;
+    message: string;
+    errors?: Record<string, string[]>;
+    status?: number;
+};

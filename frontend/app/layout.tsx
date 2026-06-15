@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AuthHydrator from '@/components/auth/AuthHydrator';
+import AuthWatcherClient from '@/components/AuthWatcherClient';
 
 export const metadata: Metadata = {
   title: 'FormCraft',
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthHydrator />
+        <AuthWatcherClient />
         {children}
       </body>
     </html>
