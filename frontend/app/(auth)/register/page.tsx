@@ -57,6 +57,7 @@ export default function RegisterPage() {
             setIsLoading(false)
         }
     }
+    
 
     return (
         <>
