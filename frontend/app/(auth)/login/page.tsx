@@ -1,10 +1,11 @@
 'use client'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { AuthInput } from '@/components/auth/AuthInput'
-import { loginUser } from '@/services/authService' // Centralized service
+import { loginUser } from '@/services/authService' 
 import { useAuthStore } from '@/store/authStore'
 import { useApiErrorHandler } from '@/hooks/useApiErrorHandler'
 
@@ -15,50 +16,48 @@ export default function LoginPage() {
   const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
 
   const router = useRouter()
-  const setUser = useAuthStore(state => state.setUser)
+  
+  // FIX: Import our centralized sync session action from the updated store
+  const syncUserSession = useAuthStore(state => state.syncUserSession)
   const { parseError } = useApiErrorHandler()
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setIsLoading(true)
-  setError(null)
-  setValidationErrors({})
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+    setValidationErrors({})
 
-  try {
-    const response = await loginUser(formData)
+    try {
+      const response = await loginUser(formData)
 
-    // FIX: check response.success before redirecting.
-    // loginUser (apiPost) throws on !res.ok — but if the BFF
-    // returns 200 with success:false, it won't throw.
-    // Always check explicitly.
-    if (!response.success) {
-      const { message, validationErrors } = parseError(response)
+      if (!response.success) {
+        const { message, validationErrors } = parseError(response)
+        setError(message)
+        setValidationErrors(validationErrors)
+        return
+      }
+
+      // FIX: Manually trigger the unified session synchronization action.
+      // This hits /api/users/me, parses 'json.data' correctly, and handles
+      // store synchronization identically to how AuthHydrator handles it.
+      const syncSuccessful = await syncUserSession()
+
+      if (syncSuccessful) {
+        // Refresh RSC route caches before changing layouts
+        router.refresh()
+        router.push('/dashboard')
+      } else {
+        setError("Authentication succeeded, but profiling failed. Please retry signing in.")
+      }
+
+    } catch (error) {
+      const { message, validationErrors } = parseError(error)
       setError(message)
       setValidationErrors(validationErrors)
-      return
+    } finally {
+      setIsLoading(false)
     }
-
-    // Save user to Zustand so components can read it immediately
-    setUser(response.data?.user ?? null)
-
-    // FIX: router.refresh() BEFORE router.push()
-    // This invalidates the RSC cache so the dashboard re-renders
-    // on the server with the new access_token cookie.
-    // Without this, Next.js may serve a stale cached render
-    // that doesn't have the cookie yet.
-    router.refresh()
-    router.push('/dashboard')
-
-  } catch (error) {
-    // This runs when apiPost throws — i.e. BFF returned !res.ok
-    const { message, validationErrors } = parseError(error)
-    setError(message)
-    setValidationErrors(validationErrors)
-  } finally {
-    setIsLoading(false)
   }
-}
-
 
   return (
     <AuthLayout title="Welcome Back" subtitle="Sign in to your account" error={error}>

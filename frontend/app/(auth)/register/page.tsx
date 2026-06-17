@@ -16,7 +16,7 @@ export default function RegisterPage() {
     const [error, setError] = useState<string | null>(null)
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
     const { parseError } = useApiErrorHandler();
-    const setUser = useAuthStore(state => state.setUser)
+    const syncUserSession = useAuthStore(state => state.syncUserSession)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -32,9 +32,13 @@ export default function RegisterPage() {
 
         try {
             const response = await registerUser(formData)
-             setUser(response.data?.user ?? null)
+            const syncSuccessful = await syncUserSession()
+            if(syncSuccessful) {
             router.push('/dashboard')
             router.refresh()
+            } else {
+                setError("Registration succeeded, but profiling failed. Please retry signing in.")
+            }
         } catch (error) {
             const { message, validationErrors } = parseError(error)
             setError(message)

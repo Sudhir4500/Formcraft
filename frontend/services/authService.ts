@@ -1,5 +1,5 @@
 
-import { apiPost } from './apiClient'
+import { apiPost,apiGet } from './apiClient'
 import type { LoginCredentials, RegisterCredentials, ApiResponse } from '@/types/api'
 import type { User } from '@/types/user'
 
@@ -18,4 +18,7 @@ export function registerUser(credentials: RegisterCredentials): Promise<ApiRespo
 
 export function logoutUser(): Promise<ApiResponse<null>> {
   return apiPost<null>('/api/auth/logout', {})
+}
+export function GetCurrentUser(): Promise<ApiResponse<AuthResult>> {
+  return apiGet<AuthResult>('/api/auth/current_user')
 }
