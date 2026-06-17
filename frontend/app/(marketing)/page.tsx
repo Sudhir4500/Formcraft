@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'FormCraft — Create Powerfully Dynamic Forms & Collect Data Instantly',
     description: 'Design intuitive digital forms, capture customer submissions seamlessly, and scale your business workflow automation.',
-    url: 'https://formcraft.com', // Replace with your production domain
+    url: 'https://formcraft-eight.vercel.app/', // Replace with your production domain
     siteName: 'FormCraft',
     locale: 'en_US',
     type: 'website',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: 'Design intuitive digital forms, capture customer submissions seamlessly, and scale your business workflow automation.',
   },
   alternates: {
-    canonical: 'https://formcraft.com',
+    canonical: 'https://formcraft-eight.vercel.app/',
   },
 }
 
