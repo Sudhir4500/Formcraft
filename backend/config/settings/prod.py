@@ -8,9 +8,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-# Database
+# Database and fall back to SQLite if DATABASE_URL is not set
 DATABASES = {
-    'default': dj_database_url.config(default=config("DATABASE_URL"))
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default=f'sqlite:///{os.path.join(BASE_DIR, "db.sqlite3")}')
+    )
 }
 # force all http to https
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
