@@ -89,7 +89,7 @@ export const UpgradeButton = () => {
             <div className="app-card group flex flex-col justify-between items-center text-center p-6 bg-surface border border-surface-border rounded-xl transition-all duration-200 hover:border-primary/40 hover:shadow-md">
               <div className="h-14 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
                 <Image 
-                  src="/assets/stripe.png"  // FIXED: Pointing directly to public/assets/
+                  src="/assets/Stripe.png"  // FIXED: Pointing directly to public/assets/
                   alt="Stripe Secure Payments" 
                   width={110} 
                   height={35} 
