@@ -29,8 +29,15 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # it will help to prevent Clickjacking attacks
 X_FRAME_OPTIONS = 'DENY'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
 
 # Whitenoise for static files
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+# Add this line below your STATIC_ROOT config
+STORAGES = {
+    "default": {
+        "BACKEND": "django.db.models.fields.files.FieldFile", # default fallback if not defined
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}

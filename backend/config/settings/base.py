@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
@@ -148,3 +149,6 @@ STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")  # from Stripe dashboard
 STRIPE_PRO_PRICE_ID = config("STRIPE_PRO_PRICE_ID")  # your subscription price ID
 STRIPE_WEBHOOK_SECRET = config("STRIPE_WEBHOOK_SECRET")  # webhook signing secret
 FRONTEND_URL = config("FRONTEND_URL")  # your frontend URL
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
