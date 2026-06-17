@@ -56,11 +56,10 @@ export default function LoginPage() {
     }
   }
   
-
   return (
     <>
       {/* Centralized Global Transition Overlay Ring */}
-      <AuthLoadingOverlay isVisible={isLoading} message="Signing in and building your secure profile environment..." />
+      <AuthLoadingOverlay isVisible={isLoading} message="Signing in ...." />
 
       <AuthLayout title="Welcome Back" subtitle="Sign in to your account" error={error}>
         <form onSubmit={handleSubmit} className="space-y-5">

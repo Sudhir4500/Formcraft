@@ -57,11 +57,10 @@ export default function RegisterPage() {
             setIsLoading(false)
         }
     }
-    
 
     return (
         <>
-            <AuthLoadingOverlay isVisible={isLoading} message="Creating your account and setting up your secure profile..." />
+            <AuthLoadingOverlay isVisible={isLoading} message="Creating your account please wait..." />
 
             <AuthLayout title="Create Account" subtitle="Get started with FormCraft today" error={error}>
                 <form onSubmit={handleSubmit} className="space-y-4">
