@@ -37,8 +37,6 @@ async function handleResponse<T>(res: Response): Promise<ApiResponse<T>> {
     };
   }
 
-  // ... (keep HTML crash check logic)
-
   let parsed: any;
   try {
     parsed = JSON.parse(text);
