@@ -8,6 +8,23 @@ A lightweight SaaS form builder built as a portfolio project to demonstrate real
 |---|---|---|
 | ![My Forms dashboard showing 3 active draft forms](./public/dashboard.png) | ![Create New Post modal with title and description fields](./public/create-form.png) | ![Choose Payment Method modal with Stripe and eSewa options](./public/payment-gateway.png) |
 
+---
+## Demo Videos
+ 
+### 1. eSewa Checkout (Local)
+ 
+https://github.com/user-attachments/assets/2551451e-e783-4036-8125-39719efcd0a7
+ 
+> Demonstrates provisioning the baseline allocation of 3 forms, encountering the application paywall, triggering a checkout request, and unlocking additional creation capacity via local eSewa sandbox routing.
+
+### 2. Stripe Checkout (International)
+https://github.com/user-attachments/assets/6fc79001-30a9-43a6-be29-92a50ae8c046
+ 
+> Showcases the global checkout pipeline with Stripe, illustrating smooth token-handling, client redirect states, and immediate database subscription updates on successful transaction callback.
+ 
+---
+
+
 ## Live Demo
 
 > **Web App:** https://formcraft-eight.vercel.app/
