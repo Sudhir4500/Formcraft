@@ -51,6 +51,9 @@ class Question(models.Model):
 
     class Meta:
         ordering = ['order']
+        constraints = [
+            models.UniqueConstraint(fields=['form', 'order'], name='unique_order_per_form')
+        ]
 
     def __str__(self):
         return self.label

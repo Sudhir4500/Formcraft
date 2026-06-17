@@ -21,23 +21,33 @@ async function getHeaders(tokenOverride?: string) {
 /**
  * Centralized response handler to ensure consistent error/success parsing
  */
-async function handleResponse<T>(res: Response): Promise<ApiResponse<T>> {
-    // if (res.status === 401) {
-    //     // 401 means the session is invalid (and refresh also failed)
-    //     throw new Error('UNAUTHORIZED');
-    // }
+// app/api/_lib/django.ts
 
-    const data = await res.json();
-    if (!res.ok) {
-        throw {
-            success: data.success,
-            message: data.message || "Something went wrong",
-            data: data.data || null,
-            errors: data.errors || null,
-            status: res.status,
-        }
-    }
-    return data;
+async function handleResponse<T>(res: Response): Promise<ApiResponse<T>> {
+  const text = await res.text();
+  const status = res.status; // Capture the actual status
+
+  if (!text.trim()) {
+    return {
+      success: res.ok as true,
+      message: res.ok ? 'Done' : `Server returned ${status} with no body`,
+      data: null as any,
+      errors: null,
+      status, // Ensure status is returned
+    };
+  }
+
+  // ... (keep HTML crash check logic)
+
+  let parsed: any;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return { success: false, message: 'Invalid JSON', data: null, errors: null, status };
+  }
+
+  // Combine parsed data with the captured status
+  return { ...parsed, status };
 }
 
 /**
@@ -85,7 +95,8 @@ async function attemptRefresh(): Promise<string | null> {
 }
 
 export async function djangoGet<T>(path: string) {
-    let res = await fetch(`${DJANGO_URL}${path}`, {
+    const url = new URL(path, DJANGO_URL).toString();
+    let res = await fetch(url, {
         headers: await getHeaders(),
         cache: 'no-store', // Ensures fresh data for dynamic dashboards
     });

@@ -22,11 +22,12 @@ export default function AuthHydrator() {
                 }
 
                 const json = await res.json();
-                if (json.success) {
-                    setUser(json.data.user);
-                } else {
+               if (json.success) {
+                    setUser(json.data); // not json.data.user
+                    } else {
                     setUser(null);
-                }
+                    }
+
             } catch {
                 setUser(null);
             } finally {

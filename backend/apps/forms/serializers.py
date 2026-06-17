@@ -4,7 +4,16 @@ from .models import Form, Question
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['id', 'question_type', 'label', 'placeholder', 'options', 'required', 'order']
+        fields = [
+            'id',
+            'question_type',
+            'label',
+            'placeholder',
+            'options',
+            'required',
+            'order',
+        ]
+
 
 class FormSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, read_only=True)

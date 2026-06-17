@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -141,3 +142,9 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# settings.py
+STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")  # from Stripe dashboard
+STRIPE_PRO_PRICE_ID = config("STRIPE_PRO_PRICE_ID")  # your subscription price ID
+STRIPE_WEBHOOK_SECRET = config("STRIPE_WEBHOOK_SECRET")  # webhook signing secret
+FRONTEND_URL = config("FRONTEND_URL")  # your frontend URL

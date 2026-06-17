@@ -45,7 +45,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = User
-        fields = ['id','name','email','created_at']
+        fields = ['id','name','email','plan','created_at']
 
 class LogoutSerializer(serializers.Serializer):
     '''

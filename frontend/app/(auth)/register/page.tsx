@@ -6,6 +6,7 @@ import { AuthLayout } from '@/components/auth/AuthLayout'
 import { AuthInput } from '@/components/auth/AuthInput'
 import { registerUser } from '@/services/authService'
 import { useApiErrorHandler } from '@/hooks/useApiErrorHandler';
+import {useAuthStore }from '@/store/authStore'
 
 
 export default function RegisterPage() {
@@ -15,6 +16,7 @@ export default function RegisterPage() {
     const [error, setError] = useState<string | null>(null)
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({})
     const { parseError } = useApiErrorHandler();
+    const setUser = useAuthStore(state => state.setUser)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -29,7 +31,8 @@ export default function RegisterPage() {
         }
 
         try {
-            await registerUser(formData)
+            const response = await registerUser(formData)
+             setUser(response.data?.user ?? null)
             router.push('/dashboard')
             router.refresh()
         } catch (error) {

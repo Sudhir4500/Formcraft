@@ -7,12 +7,14 @@ export type ApiResponse<T> =
         message: string;
         data: T;
         errors: null;
+        status?: number;
     }
     | {
         success: false;
         message: string;
         data: null;
         errors: Record<string, string[]> | null;
+        status?: number;
     };
 
 
@@ -22,8 +24,9 @@ export interface TokenPair {
 }
 
 export interface LoginResponseData {
-    user: User;
-    token: TokenPair;
+  user:    User
+  access:  string   // ← at top level of data
+  refresh: string   // ← at top level of data
 }
 
 export interface RefreshResponseData {

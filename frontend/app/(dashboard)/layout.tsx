@@ -1,5 +1,6 @@
 // This layout only applies to /dashboard /forms /settings
 // Add sidebar and topbar here later
+import {Sidebar} from '@/components/ui/Sidebar'
 export default function DashboardLayout({
     children,
 }: {
@@ -7,8 +8,9 @@ export default function DashboardLayout({
 }) {
     return (
         <div className="flex min-h-screen">
-            {/* Sidebar goes here */}
-            <main className="flex-1">{children}</main>
+            <Sidebar>
+                <main className="flex-1">{children}</main>
+            </Sidebar>
         </div>
     )
 }
