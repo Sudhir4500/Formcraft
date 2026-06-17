@@ -134,7 +134,7 @@ Error responses follow the same shape with `"success": false` and a `"errors"` f
 
 ```bash
 git clone https://github.com/Sudhir4500/Formcraft.git
-cd formcraft
+cd formcraft/backend
 
 python -m venv venv
 source venv/bin/activate
@@ -151,8 +151,8 @@ python manage.py runserver
 ### Frontend
 
 ```bash
-git clone https://github.com/Sudhir4500/formcraft-frontend
-cd formcraft-frontend
+git clone https://github.com/Sudhir4500/formcraft
+cd formcraft/frontend
 
 npm install
 
