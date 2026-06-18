@@ -157,7 +157,7 @@ cd formcraft/frontend
 npm install
 
 cp .env.example .env.local
-# Set NEXT_PUBLIC_APP_URL, DJANGO_API_URL, STRIPE_PUBLISHABLE_KEY, etc.
+# Set DJANGO_API_URL, etc.
 
 npm run dev
 ```
@@ -184,8 +184,7 @@ npm run dev
 | Variable | Description |
 |---|---|
 | `DJANGO_API_URL` | Internal URL of the Django backend (server-side only) |
-| `NEXT_PUBLIC_APP_URL` | Public Vercel URL |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
+
 
 ---
 
