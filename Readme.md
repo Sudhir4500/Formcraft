@@ -211,4 +211,4 @@ This is a portfolio project. The codebase is intentionally production-grade to s
 **Sudhir Sharma**
 Software Developer ·
 
-[Portfolio](https://sudhirsharma.com.np) · [GitHub](https://github.com/Sudhir4500) · [LinkedIn](https://linkedin.com/in/sudhir-sharma)
+[Portfolio](https://sudhirsharma.com.np) · [GitHub](https://github.com/Sudhir4500) · [LinkedIn](https://www.linkedin.com/in/sudhirsharma4500/)
